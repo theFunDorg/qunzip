@@ -56,13 +56,29 @@ cmake --build build -j
 The kdb+ C API header `k.h` (MIT licensed, from KxSystems/kdb `c/c/k.h`) is vendored
 in this repo next to `qunzip.cpp`, so no separate download is needed.
 
-rapidgzip's ISA-L acceleration (on by default) needs the NASM assembler. If NASM
-isn't installed, either install it or configure with ISA-L off (rapidgzip falls back
-to its own inflate / zlib-ng):
+rapidgzip's ISA-L acceleration (on by default) needs the NASM assembler. Without
+it, the configure step fails with:
+
+```
+CMake Error at rapidgzip/librapidarchive/src/external/isa-l/CMakeLists.txt:38 (enable_language):
+  No CMAKE_ASM_NASM_COMPILER could be found.
+```
+
+Either install NASM and reconfigure:
+
+```bash
+sudo apt-get install -y nasm      # Debian/Ubuntu
+```
+
+or configure with ISA-L off (rapidgzip falls back to its own inflate / zlib-ng —
+builds cleanly, just slower decompression):
 
 ```bash
 cmake -B build -DCMAKE_BUILD_TYPE=Release -DLIBRAPIDARCHIVE_WITH_ISAL=OFF
 ```
+
+If a previous configure already failed, delete `build/CMakeCache.txt` (or the whole
+`build/` directory) first so the stale cache doesn't mask the new option.
 
 ## Use
 
