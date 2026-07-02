@@ -1,0 +1,8 @@
+# Build output
+build/
+*.so
+*.dll
+*.dylib
+
+# Test fixtures (regenerate with test/make_sample.sh)
+test/sample.gz
