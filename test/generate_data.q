@@ -7,21 +7,7 @@ genData:{[n]
       bid:0.01*100+n?5000;
       ask:0.01*100+n?5000) }
 
-/
+big:genData `long$5e6
 
-{
-
-// Generate data
-// Append to row
-// sleep before you repeat
- }
-1_ (csv)0: genData first 1?10
-system"sleep ",string 0.001*first 1?1000
-
-
-appendCsv:{[file;t]
-    lines:csv 0: t;                         / header + data rows as strings
-    exists:not ()~key file;                 / does file already exist?
-    file 0: $[exists; 1 _ lines; lines] }   / skip header if appending
-
-  appendCsv[`:trades.csv;] t
+save `big.csv
+system"gzip big.csv"

@@ -1,10 +1,10 @@
-// qunzip.q -- load the rapidgzip-backed decompressor into a q process.
+
 
 // Requires qunzip.so (built from qunzip.cpp) to be findable by 2:.
 // 2: looks relative to the current working directory (and absolute paths work too),
 // so either run q from the directory containing qunzip.so or give a full path below.
 
-qunzip:`:/home/fund/repos/qunzip/build/qunzip 2:(`qunzip;4);   / 4-argument C function
+qunzip:`:./build/qunzip 2:(`qunzip;4);   / 4-argument C function
 
 // -----------------------------------------------------------------------------
 // Usage:
@@ -28,19 +28,3 @@ qunzip:`:/home/fund/repos/qunzip/build/qunzip 2:(`qunzip;4);   / 4-argument C fu
 // an exact size -- a chunk may be larger or smaller depending on where
 // newlines fall.
 // -----------------------------------------------------------------------------
-
-// Example: stream a file and count lines without materialising it in memory.
-//   n:0; qunzip[`:/data/big.gz; {[c] n+::count c}; 1024*1024; 4]; n
-/n:0; qunzip[`:/home/fund/repos/qunzip/file.csv.gz; {[c] n+::count c}; 1024*1024; 8]; n
-
-path:`:/home/fund/repos/qunzip/tbl.csv.gz;
-inp:();
-//\ts r:qunzip[path; {[x]`a set x }; 1024*1024*10; 1]
-
-/
-q)\ts r:qunzip[path; {[x]`inp upsert enlist x }; 1024*1024; 2]
-2252 1360033168 
-q)\ts r:qunzip[path; {[x]`inp upsert enlist x }; 1024*1024; 4]
-1525 1360033168
-q)
-1608 1360033168\ts r:qunzip[path; {[x]`inp upsert enlist x }; 1024*1024; 8]
